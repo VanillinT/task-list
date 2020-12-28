@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getTasks, createTask, editMultipleTasks } from "../../utils/api";
-import { dispatchNotificationForResult, getTokenFromCookie } from "../../utils/helpers";
+import {
+  dispatchNotificationForResult,
+  getTokenFromCookie,
+} from "../../utils/helpers";
 import { modalClosed } from "./taskModalSlice";
 
 const initialState = {
@@ -26,8 +29,9 @@ export const fetchTasks = createAsyncThunk(
 
 export const newTaskCreated = createAsyncThunk(
   "tasks/taskCreated",
-  async (data, { dispatch }) => {
-    const result = createTask(data);
+  async (task, { dispatch }) => {
+    const processedTask = { ...task, text: task.text.trim() };
+    const result = createTask(processedTask);
     result.then((res) => {
       dispatchNotificationForResult(
         dispatch,
@@ -48,9 +52,15 @@ export const tasksSaved = createAsyncThunk(
   async (params, { dispatch, getState }) => {
     const state = getState();
     const token = getTokenFromCookie();
+
     const { unsavedItems } = state.tasks;
+    const processedItems = unsavedItems.map((task) => ({
+      ...task,
+      text: task.text.trim(),
+    }));
+
     const itemsCount = unsavedItems.length;
-    const result = editMultipleTasks({ token }, unsavedItems);
+    const result = editMultipleTasks({ token }, processedItems);
     result.then((res) => {
       dispatchNotificationForResult(
         dispatch,

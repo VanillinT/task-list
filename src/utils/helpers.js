@@ -1,6 +1,7 @@
 import { notificationAdded } from "../features/notifications/notificationsSlice";
 
-export const stringIsEmail = (str) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(str);
+export const stringIsEmail = (str) =>
+  /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(str);
 
 export const dispatchNotificationForResult = (dispatch, result, _message) => {
   const resultIsArray = !!result.length;
@@ -25,8 +26,8 @@ export const getTokenFromCookie = () => {
   return (
     document.cookie
       .split(";")
-      ?.find((row) => row.trim().startsWith("token"))
-      ?.split("=")[1] || ""
+      .find((row) => row.trim().startsWith("token"))
+      .split("=")[1] || ""
   );
 };
 

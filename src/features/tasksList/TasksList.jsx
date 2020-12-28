@@ -33,6 +33,27 @@ import {
 } from "./tasksListStateSlice";
 import { headers } from "./config";
 
+const getDoubleDigitStatus = (status) => {
+  const singleDigit = String(status).length === 1;
+  return singleDigit ? "0" + status : String(status);
+};
+
+const getNewStatus = (status, { edited, done }) => {
+  let newStatus = getDoubleDigitStatus(status);
+  if (typeof edited !== "undefined") newStatus = newStatus[0] + Number(edited);
+  if (typeof done !== "undefined") newStatus = Number(done) + newStatus[1];
+
+  return Number(newStatus);
+};
+
+const getTaskInfoFromStatus = (status) => {
+  const doubleDigitStatus = getDoubleDigitStatus(status);
+  return {
+    done: doubleDigitStatus[0] === "1",
+    edited: doubleDigitStatus[1] === "1",
+  };
+};
+
 const TasksList = () => {
   const styles = useTasksListStyles();
   const dispatch = useDispatch();
@@ -61,10 +82,18 @@ const TasksList = () => {
     dispatch(taskEditedLocally(task));
   };
   const handleTextChange = (e, task) => {
-    updateUnsavedTask({ ...task, text: e.target.value });
+    updateUnsavedTask({
+      ...task,
+      text: e.target.value,
+      status: getNewStatus(task.status, { edited: true }),
+    });
   };
+
   const handleCheckboxClick = (e, task) => {
-    updateUnsavedTask({ ...task, status: e.target.checked ? 10 : 0 });
+    updateUnsavedTask({
+      ...task,
+      status: getNewStatus(task.status, { done: e.target.checked }),
+    });
   };
 
   const saveChanges = () => {
@@ -140,6 +169,11 @@ const TasksList = () => {
                       className={styles.textField}
                       variant="outlined"
                       value={task.text}
+                      label={
+                        getTaskInfoFromStatus(task.status).edited
+                          ? "Edited by admin"
+                          : ""
+                      }
                       multiline
                       rowsMax={3}
                       disabled={!loggedIn}
@@ -148,7 +182,7 @@ const TasksList = () => {
                   </TableCell>
                   <TableCell>
                     <Checkbox
-                      checked={task.status === 10}
+                      checked={getTaskInfoFromStatus(task.status).done}
                       onClick={(e) => handleCheckboxClick(e, task)}
                       disabled={!loggedIn}
                     />

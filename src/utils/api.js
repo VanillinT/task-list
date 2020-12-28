@@ -1,7 +1,7 @@
 import { ajax } from "jquery";
 
 const baseApiUrl = "https://uxcandy.com/~shapoval/test-task-backend/v2";
-const defualtParams = "?developer=VanillinT";
+const defualtParams = "?developer=beb";
 
 const fetchAsDev = async ({ method, path, params, data }) => {
   let url = baseApiUrl + path + defualtParams;
