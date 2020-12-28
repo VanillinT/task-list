@@ -25,9 +25,9 @@ export const dispatchNotificationForResult = (dispatch, result, _message) => {
 export const getTokenFromCookie = () => {
   return (
     document.cookie
-      .split(";")
+      ?.split(";")
       .find((row) => row.trim().startsWith("token"))
-      .split("=")[1] || ""
+      ?.split("=")[1] || ""
   );
 };
 
