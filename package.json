@@ -1,4 +1,5 @@
 {
+  "homepage": "http://vanillint.github.io/task-list",
   "name": "beejee-test-task",
   "version": "0.1.0",
   "private": true,
@@ -19,6 +20,8 @@
     "react-scripts": "4.0.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -41,6 +44,7 @@
   },
   "devDependencies": {
     "eslint": "^7.16.0",
-    "eslint-plugin-react": "^7.21.5"
+    "eslint-plugin-react": "^7.21.5",
+    "gh-pages": "^3.1.0"
   }
 }

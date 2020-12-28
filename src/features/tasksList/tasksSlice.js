@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getTasks, createTask, editMultipleTasks } from "../../utils/api";
-import { dispatchNotificationForResult } from "../../utils/helpers";
+import { dispatchNotificationForResult, getTokenFromCookie } from "../../utils/helpers";
 import { modalClosed } from "./taskModalSlice";
 
 const initialState = {
@@ -47,7 +47,7 @@ export const tasksSaved = createAsyncThunk(
   "tasks/tasksSaved",
   async (params, { dispatch, getState }) => {
     const state = getState();
-    const { token } = state.user;
+    const token = getTokenFromCookie();
     const { unsavedItems } = state.tasks;
     const itemsCount = unsavedItems.length;
     const result = editMultipleTasks({ token }, unsavedItems);

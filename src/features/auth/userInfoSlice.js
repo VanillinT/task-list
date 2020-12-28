@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { login } from "../../utils/api";
+import { getTokenFromCookie, putTokenInCookie } from "../../utils/helpers";
+
+const cookieToken = getTokenFromCookie();
 
 const initialState = {
-  loggedIn: false,
-  token: null,
+  loggedIn: !!cookieToken.length,
   status: "idle",
   error: null,
 };
@@ -17,8 +19,8 @@ const userInfoSlice = createSlice({
   initialState,
   reducers: {
     loggedOut: (state) => {
+      putTokenInCookie("");
       state.loggedIn = false;
-      state.token = null;
     },
     errorNullified: (state) => ({ ...state, error: null }),
   },
@@ -30,7 +32,7 @@ const userInfoSlice = createSlice({
       if (status === "error") state.error = message;
       else {
         const { token } = message;
-        state.token = token;
+        putTokenInCookie(token);
         if (token.length > 0) state.loggedIn = true;
       }
     },
