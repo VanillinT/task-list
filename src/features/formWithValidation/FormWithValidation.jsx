@@ -11,7 +11,9 @@ const FormWithValidation = ({
   errors,
 }) => {
   const styles = useFormStyles();
-  const fieldsKeys = useMemo(() => Object.keys(fieldsOptionsMap));
+  const fieldsKeys = useMemo(() => Object.keys(fieldsOptionsMap), [
+    fieldsOptionsMap,
+  ]);
 
   const getEmptyFieldsMap = () =>
     fieldsKeys.reduce((acc, key) => ({ ...acc, [key]: "" }), {});
@@ -34,7 +36,7 @@ const FormWithValidation = ({
   };
 
   useEffect(() => {
-    setErrorsMap({ ...errorsMap, ...errors });
+    setErrorsMap((prev) => ({ ...prev, ...errors }));
   }, [errors]);
 
   const getFormErrorsCount = () => {

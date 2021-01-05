@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getTasks, createTask, editMultipleTasks } from "../../utils/api";
+import { loggedOut } from "../auth/userInfoSlice";
 import {
   dispatchNotificationForResult,
   getTokenFromCookie,
@@ -41,6 +42,8 @@ export const newTaskCreated = createAsyncThunk(
       if (res.status === "ok") {
         dispatch(modalClosed());
         dispatch(fetchTasks());
+      } else if (Object.keys(res.message).includes("token")) {
+        dispatch(loggedOut());
       }
     });
     return result;
@@ -69,6 +72,9 @@ export const tasksSaved = createAsyncThunk(
           ? `Task ${unsavedItems[0].id} has been updated`
           : `${itemsCount} tasks have been updated`
       );
+      if (Object.keys(res.message).includes("token")) {
+        dispatch(loggedOut());
+      }
     });
     return result;
   }
