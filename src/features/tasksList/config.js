@@ -12,7 +12,7 @@ export const headers = [
   {
     label: "Email",
     sortable: true,
-    width: 160,
+    width: 200,
   },
   {
     label: "Text",

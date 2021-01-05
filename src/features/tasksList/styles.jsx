@@ -26,7 +26,7 @@ export const useTasksListStyles = makeStyles({
     margin: "auto",
   },
   button: {
-    marginRight: 10,
+    marginRight: "10px !important",
   },
   pagination: {},
   textField: {
